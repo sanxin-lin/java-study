@@ -7,21 +7,23 @@
 package org.jeecg.modules.system.controller;
 
 import cn.hutool.core.util.RandomUtil;
+import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.jeecg.common.api.vo.Result;
+import org.jeecg.common.constant.CommonConstant;
+import org.jeecg.common.util.oConvertUtils;
 import org.jeecg.common.util.Md5Util;
 import org.jeecg.common.util.RedisUtil;
 import org.jeecg.config.JeecgBaseConfig;
 import org.jeecg.modules.system.util.RandImageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/sys")
@@ -37,6 +39,39 @@ public class LoginController {
 
     public LoginController(JeecgBaseConfig jeecgBaseConfig) {
         this.jeecgBaseConfig = jeecgBaseConfig;
+    }
+
+    /**
+     * 登录二维码
+     */
+    @ApiOperation(value = "登录二维码")
+    @GetMapping("getLoginQrcode")
+    public Result<?> getLoginQrcode() {
+        String qrcodeId = CommonConstant.LOGIN_QRCODE_PRE + IdWorker.getIdStr();
+        //定义二维码参数
+        Map params = new HashMap<>(5);
+        params.put("qrcodeId", qrcodeId);
+        //存放二维码唯一标识30秒有效
+        redisUtil.set(CommonConstant.LOGIN_QRCODE +qrcodeId, qrcodeId, 30);
+        log.info("登录二维码，Redis key = {}，checkCode = {}", CommonConstant.LOGIN_QRCODE +qrcodeId, qrcodeId);
+        return Result.ok(params);
+    }
+
+    /**
+     * 扫码二维码
+     */
+    @ApiOperation(value = "扫码登录二维码", notes = "扫码登录二维码")
+    @PostMapping("/scanLoginQrcode")
+    public Result<?> scanLoginQrcode(@RequestParam String qrcodeId, @RequestParam String token) {
+        Object check = redisUtil.get(CommonConstant.LOGIN_QRCODE + qrcodeId);
+        if (oConvertUtils.isNotEmpty(check)) {
+            // 存放token给前台读取
+            redisUtil.set(CommonConstant.LOGIN_QRCODE_TOKEN + qrcodeId, token, 60);
+        } else {
+            return Result.error("二维码已过期,请刷新后重试");
+        }
+
+        return Result.ok("扫码成功");
     }
 
     /**
