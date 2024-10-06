@@ -26,4 +26,14 @@ public interface ISysDictService extends IService<SysDict> {
      * @return
      */
     public Map<String, List<DictModel>> queryAllDictItems();
+
+    /**
+     * 查通过查询指定table的 text code 获取字典
+     * @param tableFilterSql
+     * @param text
+     * @param code
+     * @return
+     */
+    @Deprecated
+    List<DictModel> queryTableDictItemsByCode(String tableFilterSql, String text, String code);
 }

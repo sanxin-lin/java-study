@@ -14,4 +14,13 @@ public interface ISysTableWhiteListService extends IService<SysTableWhiteList> {
      * @return
      */
     Map<String, String> getAllConfigMap();
+
+    /**
+     * 自动添加到数据库中
+     *
+     * @param tableName
+     * @param fieldName
+     * @return
+     */
+    SysTableWhiteList autoAdd(String tableName, String fieldName);
 }

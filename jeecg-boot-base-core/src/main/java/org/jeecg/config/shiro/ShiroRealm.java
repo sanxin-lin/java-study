@@ -6,7 +6,11 @@
 
 package org.jeecg.config.shiro;
 
-import lombok.extern.slf4j.Slf4j;
+import java.util.Set;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -29,9 +33,7 @@ import org.jeecg.config.mybatis.MybatisPlusSaasConfig;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import java.util.Set;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @Description: 用户登录鉴权和获取用户授权

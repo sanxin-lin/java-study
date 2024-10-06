@@ -20,6 +20,9 @@ management:
         include: metrics,httptrace-new
 
 spring:
+  main:
+  # 允许环引用
+    allow-circular-references: true
   # flyway配置
   flyway:
     # 是否启用flyway

@@ -16,4 +16,13 @@ public interface ISysBaseAPI extends CommonAPI {
      * @return
      */
     Set<String> getUserPermissionSet(String userId);
+
+    /**
+     * 根据字典表或者字典编码，校验是否在白名单中
+     *
+     * @param tableOrDictCode 表名或dictCode
+     * @param fields          如果传的是dictCode，则该参数必须传null
+     * @return
+     */
+    boolean dictTableWhiteListCheckByDict(String tableOrDictCode, String... fields);
 }

@@ -9,6 +9,7 @@ package org.jeecg.modules.system.service;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.jeecg.common.api.vo.Result;
+import org.jeecg.common.system.vo.LoginUser;
 import org.jeecg.modules.system.entity.SysUser;
 
 /**
@@ -38,5 +39,12 @@ public interface ISysUserService extends IService<SysUser> {
      * @param sysUser
      * @return
      */
-    Result<JSONObject>  setLoginTenant(SysUser sysUser, JSONObject obj, String username, Result<JSONObject> result);
+    <T> T  setLoginTenant(SysUser sysUser, String username, JSONObject obj);
+
+    /**
+     * 获取用户信息 字段信息是加密后的 【加密用户信息】
+     * @param username
+     * @return
+     */
+    LoginUser getEncodeUserInfo(String username);
 }
